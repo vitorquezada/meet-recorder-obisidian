@@ -21,7 +21,7 @@ jobs:
               uses: actions/setup-node@v4
               with:
                   node-version: ${{ matrix.node-version }}
-                  cache: "npm"
+                  cache: "pnpm"
             - run: pnpm i --frozen-lockfile
             - run: pnpm run build --if-present
             - run: pnpm run lint

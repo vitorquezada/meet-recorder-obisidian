@@ -1,5 +1,5 @@
 import { App, Editor, MarkdownView, Modal, Notice, Plugin } from "obsidian";
-import { DEFAULT_SETTINGS, PluginSettings, SampleSettingTab } from "./settings";
+import { DEFAULT_SETTINGS, PluginSettings, GeneralSettingTab } from "./settings";
 import { GetStopwatch as getStopwatch } from "./util/date-utils";
 
 type MeetRecord = {
@@ -16,16 +16,16 @@ export default class MeetRecorderPlugin extends Plugin {
 
 		const statusBarItemEl = this.addStatusBarItem();
 
-		this.addRibbonIcon("mic", "Record Meet", (evt: MouseEvent) => {
+		this.addRibbonIcon("mic", "Record meet", (evt: MouseEvent) => {
 			if (!this.meetRecord) {
-				new Notice("Start Recording Meet!", 5000);
+				new Notice("Start recording meet!", 5000);
 				this.meetRecord = {
 					inProgress: true,
 					start: new Date(),
 				};
 			} else {
 				this.meetRecord = undefined;
-				new Notice("Stop Record Meet!", 5000);
+				new Notice("Stop record meet!", 5000);
 			}
 		});
 
@@ -34,7 +34,7 @@ export default class MeetRecorderPlugin extends Plugin {
 			id: "open-modal-simple",
 			name: "Open modal (simple)",
 			callback: () => {
-				new SampleModal(this.app).open();
+				new RecordModal(this.app).open();
 			},
 		});
 		// This adds an editor command that can perform some operation on the current editor instance
@@ -57,7 +57,7 @@ export default class MeetRecorderPlugin extends Plugin {
 					// If checking is true, we're simply "checking" if the command can be run.
 					// If checking is false, then we want to actually perform the operation.
 					if (!checking) {
-						new SampleModal(this.app).open();
+						new RecordModal(this.app).open();
 					}
 
 					// This command will only show up in Command Palette when the check function returns true
@@ -68,7 +68,7 @@ export default class MeetRecorderPlugin extends Plugin {
 		});
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
-		this.addSettingTab(new SampleSettingTab(this.app, this));
+		this.addSettingTab(new GeneralSettingTab(this.app, this));
 
 		// If the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
 		// Using this function will automatically remove the event listener when this plugin is disabled.
@@ -82,7 +82,7 @@ export default class MeetRecorderPlugin extends Plugin {
 				if (this.meetRecord && this.meetRecord.inProgress) {
 					let msg = "Gravando...";
 					if (this.meetRecord.start) {
-						var durationStr = getStopwatch(this.meetRecord.start);
+						const durationStr = getStopwatch(this.meetRecord.start);
 						msg += ` ${durationStr}`;
 					}
 					statusBarItemEl.setText(msg);
@@ -96,8 +96,7 @@ export default class MeetRecorderPlugin extends Plugin {
 	onunload() {}
 
 	async loadSettings() {
-		const data = await this.loadData();
-		console.log(`Data loaded ${JSON.stringify(data)}`);
+		const data = (await this.loadData()) as PluginSettings;
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, data);
 	}
 
@@ -106,7 +105,7 @@ export default class MeetRecorderPlugin extends Plugin {
 	}
 }
 
-class SampleModal extends Modal {
+class RecordModal extends Modal {
 	constructor(app: App) {
 		super(app);
 	}

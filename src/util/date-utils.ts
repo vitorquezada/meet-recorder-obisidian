@@ -18,6 +18,6 @@ export function GetStopwatch(initDate: Date) {
 	const seconds =
 		progress.seconds?.toLocaleString(configLocale, configLocaleString) ??
 		"00";
-	var stopwatchStr = `${hour}${minutes}:${seconds}`;
+	const stopwatchStr = `${hour}${minutes}:${seconds}`;
 	return stopwatchStr;
 }

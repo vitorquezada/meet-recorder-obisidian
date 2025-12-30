@@ -9,7 +9,7 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 	mySetting: "default",
 };
 
-export class SampleSettingTab extends PluginSettingTab {
+export class GeneralSettingTab extends PluginSettingTab {
 	plugin: MeetRecorderPlugin;
 
 	constructor(app: App, plugin: MeetRecorderPlugin) {
